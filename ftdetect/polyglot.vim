@@ -316,9 +316,11 @@ if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'opencl') == -1
   
 au! BufRead,BufNewFile *.cl set filetype=opencl
 endif
-
-au! BufRead,BufNewFile *.scad set filetype=openscad
-
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'openscad') == -1
+  
+au BufRead,BufNewFile *.scad    setfiletype openscad
+an 50.80.265 &Syntax.NO.OpenSCAD :cal SetSyn("openscad")<CR>
+endif
 if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'perl') == -1
   
 function! s:DetectPerl6()
@@ -402,28 +404,6 @@ function! s:setf(filetype) abort
     let &filetype = a:filetype
   endif
 endfunction
-func! s:StarSetf(ft)
-  if expand("<amatch>") !~ g:ft_ignore_pat
-    exe 'setf ' . a:ft
-  endif
-endfunc
-au BufNewFile,BufRead *.erb,*.rhtml				call s:setf('eruby')
-au BufNewFile,BufRead .irbrc,irbrc				call s:setf('ruby')
-au BufNewFile,BufRead *.rb,*.rbw,*.gemspec			call s:setf('ruby')
-au BufNewFile,BufRead *.ru					call s:setf('ruby')
-au BufNewFile,BufRead Gemfile					call s:setf('ruby')
-au BufNewFile,BufRead *.builder,*.rxml,*.rjs,*.ruby		call s:setf('ruby')
-au BufNewFile,BufRead [rR]akefile,*.rake			call s:setf('ruby')
-au BufNewFile,BufRead [rR]akefile*				call s:StarSetf('ruby')
-au BufNewFile,BufRead [rR]antfile,*.rant			call s:setf('ruby')
-endif
-if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'ruby') == -1
-  
-function! s:setf(filetype) abort
-  if &filetype !=# a:filetype
-    let &filetype = a:filetype
-  endif
-endfunction
 au BufNewFile,BufRead Appraisals		call s:setf('ruby')
 au BufNewFile,BufRead .autotest			call s:setf('ruby')
 au BufNewFile,BufRead [Bb]uildfile		call s:setf('ruby')
@@ -442,6 +422,28 @@ au BufNewFile,BufRead [rR]outefile		call s:setf('ruby')
 au BufNewFile,BufRead .simplecov		call s:setf('ruby)
 au BufNewFile,BufRead [tT]horfile,*.thor	call s:setf('ruby')
 au BufNewFile,BufRead [vV]agrantfile		call s:setf('ruby')
+endif
+if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'ruby') == -1
+  
+function! s:setf(filetype) abort
+  if &filetype !=# a:filetype
+    let &filetype = a:filetype
+  endif
+endfunction
+func! s:StarSetf(ft)
+  if expand("<amatch>") !~ g:ft_ignore_pat
+    exe 'setf ' . a:ft
+  endif
+endfunc
+au BufNewFile,BufRead *.erb,*.rhtml				call s:setf('eruby')
+au BufNewFile,BufRead .irbrc,irbrc				call s:setf('ruby')
+au BufNewFile,BufRead *.rb,*.rbw,*.gemspec			call s:setf('ruby')
+au BufNewFile,BufRead *.ru					call s:setf('ruby')
+au BufNewFile,BufRead Gemfile					call s:setf('ruby')
+au BufNewFile,BufRead *.builder,*.rxml,*.rjs,*.ruby		call s:setf('ruby')
+au BufNewFile,BufRead [rR]akefile,*.rake			call s:setf('ruby')
+au BufNewFile,BufRead [rR]akefile*				call s:StarSetf('ruby')
+au BufNewFile,BufRead [rR]antfile,*.rant			call s:setf('ruby')
 endif
 if !exists('g:polyglot_disabled') || index(g:polyglot_disabled, 'rust') == -1
   
